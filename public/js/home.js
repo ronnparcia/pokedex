@@ -20,7 +20,10 @@ $(document).ready(() => {
     
                 // Append Pokemon names to the list
                 pokemonData.forEach(pokemon => {
-                    $('#pokemonList').append(`<li>${pokemon.name}</li>`);
+                    // Get ID
+                    let pokemonID = pokemon.url.replace('https://pokeapi.co/api/v2/pokemon/', '').replace('/', '');
+
+                    $('#pokemonList').append(`<li>${pokemonID}: ${pokemon.name}</li>`);
                 });
     
                 // Update the offset
