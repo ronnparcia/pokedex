@@ -119,6 +119,29 @@ app.get('/search', (req, res) => {
     res.render('index', { loadedPokemons: loadedPokemons, sortBy, searchQuery, searchQuery });
 });
 
+app.get('/pokemon/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        const pokemonData = await pokemonResponse.json();
+
+        console.log('DETAILED VIEW');
+
+        // Log each ability
+        pokemonData.abilities.forEach(ability => {
+            console.log(ability.ability.name);
+        });
+
+        console.log(pokemonData.name)
+
+        res.render('detailed-view', {pokemon: pokemonData});
+    } catch (error) {
+        console.error('Error fetching Pokemon details: ', error);
+        res.status(500).send('Error fetching Pokemon details');
+    }
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
