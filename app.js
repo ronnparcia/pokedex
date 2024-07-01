@@ -149,20 +149,10 @@ app.get('/pokemon/:id', async (req, res) => {
     try {
         const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
         const pokemonData = await pokemonResponse.json();
-        let doubleDamageWeaknesses = [];
-        let halfDamageWeaknesses = [];
         
-        console.log('DETAILED VIEW');
         
         const pokemonWeaknesses = await fetchWeaknesses(pokemonData.types);
         
-        // Log weaknesses
-        console.log('Weaknesses: ', pokemonWeaknesses);
-        
-        console.log(pokemonData.name)
-        // Log
-        console.log('Double Damage From: ', doubleDamageWeaknesses);
-        console.log('Half Damage From: ', halfDamageWeaknesses);
         
         res.render('detailed-view', {pokemon: pokemonData, pokemonWeaknesses});
     } catch (error) {
