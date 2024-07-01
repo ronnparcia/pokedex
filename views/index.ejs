@@ -10,7 +10,7 @@
     <h1>Pokedex</h1>
     <ul id="pokemon-list">
         <% loadedPokemon.forEach(pokemon => { %>
-            <li><%= pokemon.name %></li>
+            <li><%= pokemon.id %> - <%= pokemon.name %></li>
         <% }); %>
     </ul>
 </body>

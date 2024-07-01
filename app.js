@@ -16,8 +16,18 @@ app.use(express.static('public'));
 // Function for fetching all Pokemon
 const fetchAllPokemon = async () => {
     try {
+        // Fetch all Pokemon from the PokeAPI
         const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
-        allPokemons = response.data.results;
+        
+        // Extract the name and ID of each Pokemon
+        allPokemons = response.data.results.map((pokemon) => {
+            const id = pokemon.url.match(/\/pokemon\/(\d+)\//)[1]; // Extract ID from URL
+            return {
+                name: pokemon.name,
+                id: parseInt(id, 10), // Convert ID to number
+            };
+        });;
+
         console.log('All Pokemon fetched: ', allPokemons);        
     } catch (error) {
         console.error('Error fetching all Pokemon: ', error);
