@@ -44,6 +44,16 @@ app.get('/', (req, res) => {
     res.render('index', { loadedPokemon: loadedPokemon });
 });
 
+// Define a route for loading more Pokemon
+app.get('/load-more', (req, res) => {
+    const currentLength = loadedPokemon.length;
+    const newLength = currentLength + 10;
+    const nextPokemons = allPokemons.slice(currentLength, newLength);
+    
+    console.log('Sending Next Pokemon: ', nextPokemons);
+    res.json(nextPokemons); // Send next 10 Pokemon as JSON
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
