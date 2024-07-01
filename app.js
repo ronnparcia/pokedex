@@ -29,12 +29,12 @@ fetchAllPokemon();
 
 // Define a route for the root URL
 app.get('/', (req, res) => {
-  loadedPokemon = allPokemons.slice(0, 10); // Load first 10 Pokemon 
-  console.log('Sending Loaded Pokemon: ', loadedPokemon);
-  res.render('index', { loadedPokemon: loadedPokemon });
+    loadedPokemon = allPokemons.slice(0, 10); // Load first 10 Pokemon 
+    console.log('Sending Loaded Pokemon: ', loadedPokemon);
+    res.render('index', { loadedPokemon: loadedPokemon });
 });
 
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running on http://localhost:${port}`);
 });
