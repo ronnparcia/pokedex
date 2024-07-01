@@ -25,9 +25,12 @@ const fetchAllPokemon = async () => {
         // Extract the name and ID of each Pokemon
         allPokemons = response.data.results.map((pokemon) => {
             const id = pokemon.url.match(/\/pokemon\/(\d+)\//)[1]; // Extract ID from URL
+            const imageUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${id.padStart(3, '0')}.png`;
+
             return {
                 name: pokemon.name,
                 id: parseInt(id, 10), // Convert ID to number
+                imageUrl: imageUrl
             };
         });;
         
