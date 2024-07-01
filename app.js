@@ -30,7 +30,7 @@ const fetchAllPokemon = async () => {
             if (id.length < 5) {
                 imageUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${id.padStart(3, '0')}.png`;
             }
-
+            
             return {
                 name: pokemon.name,
                 id: parseInt(id, 10), // Convert ID to number
@@ -45,6 +45,30 @@ const fetchAllPokemon = async () => {
     } catch (error) {
         console.error('Error fetching all Pokemon: ', error);
     }
+};
+
+// Function to fetch qeaknesses
+const fetchWeaknesses = async (types) => {
+    let weaknesses = [];
+    
+    console.log("Received types: ");
+    // console.log(types[0].type.name);
+    
+    for (const type of types) {
+        const response = await axios.get(type.type.url);
+        const data = response.data;
+        
+        
+        for (const weakness of data.damage_relations.half_damage_from) {
+            if (!weaknesses.includes(weakness.name)) {
+                weaknesses.push(weakness.name);
+            }
+        }
+        
+        // weaknesses.push(data.damage_relations.half_damage_from);
+    }
+    
+    return weaknesses;
 };
 
 // Fetch all Pokemon on server start
@@ -63,7 +87,7 @@ app.get('/', (req, res) => {
     loadedPokemons = allPokemons.slice(0, 10);
     
     console.log('Sending Loaded Pokemon: ', loadedPokemons);
-
+    
     // Render the index view and pass the loaded Pokemon
     res.render('index', { loadedPokemons: loadedPokemons, sortBy, searchQuery });
 });
@@ -113,7 +137,7 @@ app.get('/search', (req, res) => {
     
     // Load the first 10 Pokemon from the filtered list
     loadedPokemons = allPokemonsFilteredSorted.slice(0, 10);
-
+    
     // Render the index view and pass the loaded Pokemon
     console.log('Sending Pokemon Search Results: ', loadedPokemons);
     res.render('index', { loadedPokemons: loadedPokemons, sortBy, searchQuery, searchQuery });
@@ -121,21 +145,26 @@ app.get('/search', (req, res) => {
 
 app.get('/pokemon/:id', async (req, res) => {
     const id = req.params.id;
-
+    
     try {
         const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
         const pokemonData = await pokemonResponse.json();
-
+        let doubleDamageWeaknesses = [];
+        let halfDamageWeaknesses = [];
+        
         console.log('DETAILED VIEW');
-
-        // Log each ability
-        pokemonData.abilities.forEach(ability => {
-            console.log(ability.ability.name);
-        });
-
+        
+        const pokemonWeaknesses = await fetchWeaknesses(pokemonData.types);
+        
+        // Log weaknesses
+        console.log('Weaknesses: ', pokemonWeaknesses);
+        
         console.log(pokemonData.name)
-
-        res.render('detailed-view', {pokemon: pokemonData});
+        // Log
+        console.log('Double Damage From: ', doubleDamageWeaknesses);
+        console.log('Half Damage From: ', halfDamageWeaknesses);
+        
+        res.render('detailed-view', {pokemon: pokemonData, pokemonWeaknesses});
     } catch (error) {
         console.error('Error fetching Pokemon details: ', error);
         res.status(500).send('Error fetching Pokemon details');
