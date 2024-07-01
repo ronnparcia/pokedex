@@ -6,6 +6,9 @@ const port = 3000;
 // Variables to hold Pokemon List
 let allPokemons = [];
 let loadedPokemon = [];
+let filteredPokemons = [];
+
+let sortBy = '';
 
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
@@ -27,7 +30,10 @@ const fetchAllPokemon = async () => {
                 id: parseInt(id, 10), // Convert ID to number
             };
         });;
-
+        
+        // Initially, all Pokemon are in the filtered list
+        filteredPokemons = allPokemons;
+        
         console.log('All Pokemon fetched: ', allPokemons);        
     } catch (error) {
         console.error('Error fetching all Pokemon: ', error);
@@ -41,17 +47,33 @@ fetchAllPokemon();
 app.get('/', (req, res) => {
     loadedPokemon = allPokemons.slice(0, 10); // Load first 10 Pokemon 
     console.log('Sending Loaded Pokemon: ', loadedPokemon);
-    res.render('index', { loadedPokemon: loadedPokemon });
+    res.render('index', { loadedPokemon: loadedPokemon, sortBy });
 });
 
 // Define a route for loading more Pokemon
 app.get('/load-more', (req, res) => {
     const currentLength = loadedPokemon.length;
     const newLength = currentLength + 10;
-    const nextPokemons = allPokemons.slice(currentLength, newLength);
+    const nextPokemons = filteredPokemons.slice(currentLength, newLength);
+
+    loadedPokemon = [...loadedPokemon, ...nextPokemons];
     
     console.log('Sending Next Pokemon: ', nextPokemons);
     res.json(nextPokemons); // Send next 10 Pokemon as JSON
+});
+
+// Sorting
+app.get('/sort', (req, res) => {
+    sortBy = req.query.sortBy;
+    
+    if (sortBy === 'id') {
+        filteredPokemons.sort((a, b) => a.id - b.id);
+    } else if (sortBy === 'name') {
+        filteredPokemons.sort((a, b) => a.name.localeCompare(b.name));
+    }
+    
+    loadedPokemon = filteredPokemons.slice(0, 10);
+    res.render('index', { loadedPokemon: loadedPokemon, sortBy });
 });
 
 // Start the server

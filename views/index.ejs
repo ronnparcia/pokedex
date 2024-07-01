@@ -9,6 +9,13 @@
 </head>
 <body>
     <h1>Pokedex</h1>
+    <form action="/sort" method="get">
+        <select name="sortBy" onchange="this.form.submit()">
+          <option value="id" <%= sortBy === 'id' ? 'selected' : '' %>>Sort by ID</option>
+          <option value="name" <%= sortBy === 'name' ? 'selected' : '' %>>Sort by Name</option>
+        </select>
+      </form>
+
     <ul id="pokemon-list">
         <% loadedPokemon.forEach(pokemon => { %>
             <li><%= pokemon.id %> - <%= pokemon.name %></li>
