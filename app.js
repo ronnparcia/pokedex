@@ -5,8 +5,8 @@ const port = 3000;
 
 // Variables to hold Pokemon List
 let allPokemons = []; // All Pokemon fetched from the API
-let loadedPokemon = []; // Pokemon currently loaded in the view (to identify current length)
-let filteredPokemons = []; // Pokemon currently filtered by search query or sorted by option
+let loadedPokemons = []; // Pokemon currently loaded in the view (to identify current length)
+let allPokemonsFilteredSorted = []; // Pokemon currently filtered by search query or sorted by option
 
 // Variables to hold sort option and search query
 let sortBy = ''; 
@@ -32,7 +32,7 @@ const fetchAllPokemon = async () => {
         });;
         
         // Initially, all Pokemon are in the filtered list
-        filteredPokemons = allPokemons;
+        allPokemonsFilteredSorted = allPokemons;
         
         console.log('All Pokemon fetched: ', allPokemons);        
     } catch (error) {
@@ -49,26 +49,26 @@ app.get('/', (req, res) => {
     sortBy = ''; // Default sort option
     searchQuery = ''; // Default search query
     
-    // Reset filteredPokemons to allPokemons
-    filteredPokemons = allPokemons;
+    // Reset allPokemonsFilteredSorted to allPokemons
+    allPokemonsFilteredSorted = allPokemons;
     
     // Load first 10 Pokemon from the full list
-    loadedPokemon = allPokemons.slice(0, 10);
+    loadedPokemons = allPokemons.slice(0, 10);
     
-    console.log('Sending Loaded Pokemon: ', loadedPokemon);
+    console.log('Sending Loaded Pokemon: ', loadedPokemons);
 
     // Render the index view and pass the loaded Pokemon
-    res.render('index', { loadedPokemon: loadedPokemon, sortBy, searchQuery });
+    res.render('index', { loadedPokemons: loadedPokemons, sortBy, searchQuery });
 });
 
 // Define a route for loading more Pokemon
 app.get('/load-more', (req, res) => {
-    const currentLength = loadedPokemon.length; // Identify the current length of loaded Pokemon
+    const currentLength = loadedPokemons.length; // Identify the current length of loaded Pokemon
     const newLength = currentLength + 10; // Calculate the new length of loaded Pokemon
-    const nextPokemons = filteredPokemons.slice(currentLength, newLength); // Get the next 10 Pokemon
+    const nextPokemons = allPokemonsFilteredSorted.slice(currentLength, newLength); // Get the next 10 Pokemon
     
     // Append next 10 so the length is updated when load more is clicked again
-    loadedPokemon = [...loadedPokemon, ...nextPokemons]; 
+    loadedPokemons = [...loadedPokemons, ...nextPokemons]; 
     
     // Send next 10 Pokemon as JSON
     console.log('Sending Next Pokemon: ', nextPokemons);
@@ -80,36 +80,36 @@ app.get('/sort', (req, res) => {
     sortBy = req.query.sortBy; // Get the sort option from the query string
     
     if (sortBy === 'id') {
-        filteredPokemons.sort((a, b) => a.id - b.id);
+        allPokemonsFilteredSorted.sort((a, b) => a.id - b.id);
     } else if (sortBy === 'name') {
-        filteredPokemons.sort((a, b) => a.name.localeCompare(b.name));
+        allPokemonsFilteredSorted.sort((a, b) => a.name.localeCompare(b.name));
     }
     
     // Load the first 10 Pokemon from the sorted list
-    loadedPokemon = filteredPokemons.slice(0, 10);
-    res.render('index', { loadedPokemon: loadedPokemon, sortBy, searchQuery });
+    loadedPokemons = allPokemonsFilteredSorted.slice(0, 10);
+    res.render('index', { loadedPokemons: loadedPokemons, sortBy, searchQuery });
 });
 
 app.get('/search', (req, res) => {
     searchQuery = req.query.searchQuery.toLowerCase(); // Get the search query from the query string
     
     // Filter Pokemon by search query
-    filteredPokemons = allPokemons.filter(pokemon =>
+    allPokemonsFilteredSorted = allPokemons.filter(pokemon =>
         pokemon.name.toLowerCase().includes(searchQuery) || pokemon.id.toString() === searchQuery
     );
     
     if (sortBy === 'id') {
-        filteredPokemons.sort((a, b) => a.id - b.id);
+        allPokemonsFilteredSorted.sort((a, b) => a.id - b.id);
     } else if (sortBy === 'name') {
-        filteredPokemons.sort((a, b) => a.name.localeCompare(b.name));
+        allPokemonsFilteredSorted.sort((a, b) => a.name.localeCompare(b.name));
     }
     
     // Load the first 10 Pokemon from the filtered list
-    loadedPokemon = filteredPokemons.slice(0, 10);
+    loadedPokemons = allPokemonsFilteredSorted.slice(0, 10);
 
     // Render the index view and pass the loaded Pokemon
-    console.log('Sending Pokemon Search Results: ', loadedPokemon);
-    res.render('index', { loadedPokemon: loadedPokemon, sortBy, searchQuery, searchQuery });
+    console.log('Sending Pokemon Search Results: ', loadedPokemons);
+    res.render('index', { loadedPokemons: loadedPokemons, sortBy, searchQuery, searchQuery });
 });
 
 // Start the server
