@@ -154,7 +154,7 @@ app.get('/pokemon/:id', async (req, res) => {
         const pokemonWeaknesses = await fetchWeaknesses(pokemonData.types);
         
         
-        res.render('detailed-view', {pokemon: pokemonData, pokemonWeaknesses});
+        res.render('detailed-view', {id, pokemon: pokemonData, pokemonWeaknesses});
     } catch (error) {
         console.error('Error fetching Pokemon details: ', error);
         res.status(500).send('Error fetching Pokemon details');
