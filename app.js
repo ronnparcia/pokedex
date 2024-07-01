@@ -91,7 +91,7 @@ app.get('/search', (req, res) => {
     searchQuery = req.query.searchQuery.toLowerCase();
     
     filteredPokemons = allPokemons.filter(pokemon =>
-        pokemon.name.toLowerCase().startsWith(searchQuery.toLowerCase()) || pokemon.id.toString() === searchQuery
+        pokemon.name.toLowerCase().includes(searchQuery.toLowerCase()) || pokemon.id.toString() === searchQuery
     );
     
     if (sortBy === 'id') {
