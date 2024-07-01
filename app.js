@@ -9,6 +9,7 @@ let loadedPokemon = [];
 let filteredPokemons = [];
 
 let sortBy = '';
+let searchQuery = '';
 
 // Set the view engine to EJS
 app.set('view engine', 'ejs');
@@ -45,9 +46,19 @@ fetchAllPokemon();
 
 // Define a route for the root URL
 app.get('/', (req, res) => {
-    loadedPokemon = allPokemons.slice(0, 10); // Load first 10 Pokemon 
+    // Reset search query and sort option to default values
+    sortBy = ''; // Default sort option
+    searchQuery = ''; // Default search query
+
+    // Reset filteredPokemons to allPokemons
+    filteredPokemons = allPokemons;
+
+    // Load first 10 Pokemon from the full list
+    loadedPokemon = allPokemons.slice(0, 10);
+
+
     console.log('Sending Loaded Pokemon: ', loadedPokemon);
-    res.render('index', { loadedPokemon: loadedPokemon, sortBy });
+    res.render('index', { loadedPokemon: loadedPokemon, sortBy, searchQuery });
 });
 
 // Define a route for loading more Pokemon
@@ -73,7 +84,24 @@ app.get('/sort', (req, res) => {
     }
     
     loadedPokemon = filteredPokemons.slice(0, 10);
-    res.render('index', { loadedPokemon: loadedPokemon, sortBy });
+    res.render('index', { loadedPokemon: loadedPokemon, sortBy, searchQuery });
+});
+
+app.get('/search', (req, res) => {
+    searchQuery = req.query.searchQuery.toLowerCase();
+
+    filteredPokemons = allPokemons.filter(pokemon =>
+        pokemon.name.toLowerCase().startsWith(searchQuery.toLowerCase()) || pokemon.id.toString() === searchQuery
+    );
+
+    if (sortBy === 'id') {
+        filteredPokemons.sort((a, b) => a.id - b.id);
+      } else if (sortBy === 'name') {
+        filteredPokemons.sort((a, b) => a.name.localeCompare(b.name));
+      }
+    
+      loadedPokemon = filteredPokemons.slice(0, 10);
+      res.render('index', { loadedPokemon: loadedPokemon, sortBy, searchQuery, searchQuery });
 });
 
 // Start the server
