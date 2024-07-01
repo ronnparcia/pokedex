@@ -5,8 +5,8 @@ const port = 3000;
 
 // Variables to hold Pokemon List
 let allPokemons = []; // All Pokemon fetched from the API
-let loadedPokemons = []; // Pokemon currently loaded in the view (to identify current length)
 let allPokemonsFilteredSorted = []; // Pokemon currently filtered by search query or sorted by option
+let loadedPokemons = []; // Pokemon currently loaded in the view (to identify current length)
 
 // Variables to hold sort option and search query
 let sortBy = ''; 
