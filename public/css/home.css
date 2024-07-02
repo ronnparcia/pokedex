@@ -1,0 +1,15 @@
+.card {
+    overflow: hidden;
+}
+
+.card-img-wrapper {
+    background-color: rgb(223, 229, 244);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-img-wrapper img {
+    height: 75px;
+    display: block;
+}
