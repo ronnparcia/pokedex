@@ -41,7 +41,7 @@ const fetchAllPokemon = async () => {
         // Initially, all Pokemon are in the filtered list
         allPokemonsFilteredSorted = allPokemons;
         
-        console.log('All Pokemon fetched: ', allPokemons);        
+        console.log('All Pokemon fetched.');        
     } catch (error) {
         console.error('Error fetching all Pokemon: ', error);
     }
@@ -51,21 +51,15 @@ const fetchAllPokemon = async () => {
 const fetchWeaknesses = async (types) => {
     let weaknesses = [];
     
-    console.log("Received types: ");
-    // console.log(types[0].type.name);
-    
     for (const type of types) {
         const response = await axios.get(type.type.url);
         const data = response.data;
-        
         
         for (const weakness of data.damage_relations.half_damage_from) {
             if (!weaknesses.includes(weakness.name)) {
                 weaknesses.push(weakness.name);
             }
         }
-        
-        // weaknesses.push(data.damage_relations.half_damage_from);
     }
     
     return weaknesses;
@@ -86,7 +80,7 @@ app.get('/', (req, res) => {
     // Load first 10 Pokemon from the full list
     loadedPokemons = allPokemons.slice(0, 10);
     
-    console.log('Sending Loaded Pokemon: ', loadedPokemons);
+    console.log('Sending Loaded Pokemon.');
     
     // Render the index view and pass the loaded Pokemon
     res.render('index', { loadedPokemons: loadedPokemons, sortBy, searchQuery });
@@ -102,7 +96,7 @@ app.get('/load-more', (req, res) => {
     loadedPokemons = [...loadedPokemons, ...nextPokemons]; 
     
     // Send next 10 Pokemon as JSON
-    console.log('Sending Next Pokemon: ', nextPokemons);
+    console.log('Sending Next Pokemon.');
     res.json(nextPokemons); 
 });
 
@@ -139,7 +133,7 @@ app.get('/search', (req, res) => {
     loadedPokemons = allPokemonsFilteredSorted.slice(0, 10);
     
     // Render the index view and pass the loaded Pokemon
-    console.log('Sending Pokemon Search Results: ', loadedPokemons);
+    console.log('Sending Pokemon Search Results.');
     res.render('index', { loadedPokemons: loadedPokemons, sortBy, searchQuery, searchQuery });
 });
 
@@ -150,9 +144,7 @@ app.get('/pokemon/:id', async (req, res) => {
         const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
         const pokemonData = await pokemonResponse.json();
         
-        
         const pokemonWeaknesses = await fetchWeaknesses(pokemonData.types);
-        
         
         res.render('detailed-view', {id, pokemon: pokemonData, pokemonWeaknesses});
     } catch (error) {
