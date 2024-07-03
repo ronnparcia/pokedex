@@ -143,10 +143,12 @@ app.get('/pokemon/:id', async (req, res) => {
     try {
         const pokemonResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
         const pokemonData = await pokemonResponse.json();
+        const pokemonimageUrl = `https://assets.pokemon.com/assets/cms2/img/pokedex/full/${id.padStart(3, '0')}.png`;
         
         const pokemonWeaknesses = await fetchWeaknesses(pokemonData.types);
+        console.log(pokemonimageUrl);
         
-        res.render('detailed-view', {id, pokemon: pokemonData, pokemonWeaknesses});
+        res.render('detailed-view', {id, pokemon: pokemonData, pokemonWeaknesses, pokemonimageUrl});
     } catch (error) {
         console.error('Error fetching Pokemon details: ', error);
         res.status(500).send('Error fetching Pokemon details');
