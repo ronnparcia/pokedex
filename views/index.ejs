@@ -2,37 +2,54 @@
 <html lang="en">
 <head>
     <title>Pokedex</title>
-
+    
     <!-- Partial to head.ejs -->
     <%- include('partials/head') %>
-
+    
     <link rel="stylesheet" href="/css/home.css">
 </head>
 <body>
     <div class="container">
         <h1>Pokedex</h1>
-        <form action="/search" method="get">
-            <input type="text" name="searchQuery" placeholder="Search by name or ID" value="<%= searchQuery %>">
-            <button type="submit">Search</button>
-        </form>
-
-        <form action="/sort" method="get">
-            <select name="sortBy" onchange="this.form.submit()">
-            <option value="id" <%= sortBy === 'id' ? 'selected' : '' %>>Sort by ID</option>
-            <option value="name" <%= sortBy === 'name' ? 'selected' : '' %>>Sort by Name</option>
-            </select>
-        </form>
-
+        <div id="forms-wrapper">
+            <div id="sort-wrapper">
+                <form action="/sort" method="get">
+                    <select class="form-select" name="sortBy" onchange="this.form.submit()">
+                        <option value="id" <%= sortBy === 'id' ? 'selected' : '' %>>Sort by ID</option>
+                        <option value="name" <%= sortBy === 'name' ? 'selected' : '' %>>Sort by Name</option>
+                    </select>
+                </form>
+            </div>
+            <div id="search-wrapper">
+                <form action="/search" method="get">
+                    <div class="input-group">
+                        <input type="text" 
+                            class="form-control" 
+                            placeholder="Search by name or ID" 
+                            aria-label="Search by name or ID" 
+                            aria-describedby="button-addon2"
+                            name="searchQuery" 
+                            placeholder="Search by name or ID" 
+                            value="<%= searchQuery %>">
+                        
+                        <button type="submit"
+                            class="btn btn-primary"
+                            id="button-addon2">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
         <div id="pokemon-grid" class="row row-cols-4 g-3">
             <% loadedPokemons.forEach(pokemon => { %>
                 <%- include('partials/_pokemonCard', { pokemon: pokemon }) %>
-            <% }); %>
+                <% }); %>
+            </div>
+            
+            <button id="load-more" class="btn btn-primary">Load More</button>
         </div>
-
-        <button id="load-more">Load More</button>
-    </div>
-    
-    <!-- Client-side Script -->
-    <script src="/js/index.js"></script>
-</body>
-</html>
+        
+        <!-- Client-side Script -->
+        <script src="/js/index.js"></script>
+    </body>
+    </html>

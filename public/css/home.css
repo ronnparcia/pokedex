@@ -13,3 +13,25 @@
     height: 75px;
     display: block;
 }
+
+.card h5 {
+    margin-bottom: 0;
+}
+
+#forms-wrapper {
+    display: flex;
+    margin-bottom: 2rem;
+}
+
+#sort-wrapper {
+    margin-right: 1rem;
+}
+
+#search-wrapper {
+    flex: 1;
+}
+
+#load-more {
+    margin: 2rem auto 0;
+    display: block;
+}
