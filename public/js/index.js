@@ -28,10 +28,12 @@ $(document).ready(function() {
         // Make card element and store in variable
         const card = $(`
             <div class="col">
-                <div class="card">
-                    <div class="row g-0">
+                <a href="/pokemon/${pokemon.id}">
+                    <div class="card">
+                        <div class="row g-0">
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
         `);
     

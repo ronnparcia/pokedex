@@ -1,19 +1,21 @@
 <div class="col">
-    <div class="card">
-        <div class="row g-0">
-            <!-- Image -->
-             <div class="card-img-wrapper col-4">
-                <% if (pokemon.imageUrl) { %>
-                    <img src="<%= pokemon.imageUrl %>" alt="<%= pokemon.name %>">
-                <% } %>
-             </div>
-             <!-- Body -->
-              <div class="col-8">
-                <div class="card-body">
-                    <h5 class="card-title"><%= pokemon.name; %></h5>
-                    <p class="card-text"><small class="text-body-secondary">ID No. <%= pokemon.id %></small></p>
-                 </div>
-              </div>
+    <a href="/pokemon/<%= pokemon.id %>">
+        <div class="card">
+            <div class="row g-0">
+                    <!-- Image -->
+                    <div class="card-img-wrapper col-4">
+                        <% if (pokemon.imageUrl) { %>
+                            <img src="<%= pokemon.imageUrl %>" alt="<%= pokemon.name %>">
+                        <% } %>
+                    </div>
+                    <!-- Body -->
+                    <div class="col-8">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= pokemon.name; %></h5>
+                            <p class="card-text"><small class="text-body-secondary">ID No. <%= pokemon.id %></small></p>
+                        </div>
+                    </div>
+                </div>
         </div>
-    </div>
+    </a>
 </div>
