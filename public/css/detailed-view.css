@@ -36,3 +36,13 @@
     min-width: 5rem;
     display: block;
 }
+
+.home-link {
+    text-decoration: none;
+    margin-bottom: 2rem;
+    display: block;
+}
+
+.home-link:hover {
+    text-decoration: underline;
+}
